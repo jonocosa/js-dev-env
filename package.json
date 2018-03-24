@@ -1,16 +1,39 @@
 {
   "name": "js-dev-env",
   "version": "1.0.0",
+  "eslintConfig":{
+    "root": true,
+    "extends": [
+      "eslint:recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 7,
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "no-console":1
+    }
+  },
   "description": "javascript development environment",
   "main": "index.js",
   "scripts": {
-    "prestart": "node ./buildScripts/startMessage.js",
+    "prestart": "babel-node ./buildScripts/startMessage.js",
     "start": "npm-run-all --parallel security-check open:src",
-    "open:src": "node ./buildScripts/srcServer.js",
+    "open:src": "babel-node ./buildScripts/srcServer.js",
+    "lint": "esw webpack.config.* src buildScripts",
+    "lint:watch" : "npm run lint -- --watch",
     "security-check": "nsp check",
     "localtunnel": "lt --port 3000 ",
     "share": "npm-run-all --parallel open:src localtunnel",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter progress buildScripts/testSetup.js \"src/**/*.test.js",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
